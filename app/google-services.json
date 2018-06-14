@@ -1,0 +1,210 @@
+{
+  "project_info": {
+    "project_number": "1064490998366",
+    "firebase_url": "https://socero-ba0e6.firebaseio.com",
+    "project_id": "socero-ba0e6",
+    "storage_bucket": "socero-ba0e6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1064490998366:android:891e00236a57e21d",
+        "android_client_info": {
+          "package_name": "com.example.socero.soceroapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1064490998366-sh15266q99plppomvum59lbc77lp0bs9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.socero.soceroapp",
+            "certificate_hash": "6e9f8378d107e5d9c8f282ce1d96f5ca592d15b4"
+          }
+        },
+        {
+          "client_id": "1064490998366-ji0937gfpgpf8nqqeg8eprfeklvdg17b.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.socero.soceroapp",
+            "certificate_hash": "172eba79d9642e7c918ac5657fa5cd72c59e698b"
+          }
+        },
+        {
+          "client_id": "1064490998366-kgjqal9fkfc1pgv2c28gbk3ohr2ah9s8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.socero.soceroapp",
+            "certificate_hash": "e1413b0ed0f499266ddde43e3a58d6319e8f362e"
+          }
+        },
+        {
+          "client_id": "1064490998366-g5ub8rpe06mjq1glbihc94ra9mn7qq5j.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.socero.soceroapp",
+            "certificate_hash": "5c55968df6f17d50e3ee23bb9335c3af91d18a9c"
+          }
+        },
+        {
+          "client_id": "1064490998366-tekgbjn35kemm0ficpad9s63iais1urv.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "1064490998366-5rvdmdo78hfhjhifp4pq6nom264aoo5l.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "1064490998366-5rvdmdo78hfhjhifp4pq6nom264aoo5l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCHfogK_IPJGSp8NyoAsTHEhRB4Skz-2wI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1064490998366-tekgbjn35kemm0ficpad9s63iais1urv.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1064490998366-pf9ud9m0ku7jte27e6a70kc2l9893k8a.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.socero.SoceroAppBeta",
+                "app_store_id": "1269261277"
+              }
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1064490998366:android:ce69cecca43d6f85",
+        "android_client_info": {
+          "package_name": "com.team.socero.loopvendor"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1064490998366-tekgbjn35kemm0ficpad9s63iais1urv.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "1064490998366-5rvdmdo78hfhjhifp4pq6nom264aoo5l.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "1064490998366-5rvdmdo78hfhjhifp4pq6nom264aoo5l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCHfogK_IPJGSp8NyoAsTHEhRB4Skz-2wI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1064490998366:android:c73c0bd99ce1f0cd",
+        "android_client_info": {
+          "package_name": "com.team.socero.soceroapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1064490998366-4p7qu1p4f43dhekrl4icc8uc5d9vgai3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.team.socero.soceroapp",
+            "certificate_hash": "6e9f8378d107e5d9c8f282ce1d96f5ca592d15b4"
+          }
+        },
+        {
+          "client_id": "1064490998366-a02i3dbjo3ej48urt9mhomj5ph9abglq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.team.socero.soceroapp",
+            "certificate_hash": "172eba79d9642e7c918ac5657fa5cd72c59e698b"
+          }
+        },
+        {
+          "client_id": "1064490998366-tekgbjn35kemm0ficpad9s63iais1urv.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "1064490998366-vm7i2o87pis5pbeoqu49hvlijunrjak1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.team.socero.soceroapp",
+            "certificate_hash": "e1413b0ed0f499266ddde43e3a58d6319e8f362e"
+          }
+        },
+        {
+          "client_id": "1064490998366-5rvdmdo78hfhjhifp4pq6nom264aoo5l.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "1064490998366-5rvdmdo78hfhjhifp4pq6nom264aoo5l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCHfogK_IPJGSp8NyoAsTHEhRB4Skz-2wI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1064490998366-tekgbjn35kemm0ficpad9s63iais1urv.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1064490998366-pf9ud9m0ku7jte27e6a70kc2l9893k8a.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.socero.SoceroAppBeta",
+                "app_store_id": "1269261277"
+              }
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

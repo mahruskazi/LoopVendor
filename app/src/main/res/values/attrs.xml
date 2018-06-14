@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="HeaderView">
+        <attr name="headerColor" format="color" />
+        <attr name="headerLabel" format="string"/>
+        <attr name="labelColor" format="color"/>
+        <attr name="textSize"/>
+    </declare-styleable>
+</resources>

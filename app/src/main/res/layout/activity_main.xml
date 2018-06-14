@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.team.socero.loopvendor.MainActivity">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/plans"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </android.support.v7.widget.RecyclerView>
+
+    <!--app:layout_behavior="com.team.socero.loopvendor.ScrollAwareFAB"-->
+
+    <com.github.clans.fab.FloatingActionMenu
+        android:id="@+id/create_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:fab_colorPressed="@color/colorPrimary"
+        android:layout_gravity="bottom|end"
+        app:menu_icon="@drawable/plus">
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/create_event"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:fab_label="Events"
+            app:fab_size="mini"
+            android:onClick="createEvent"
+            android:src="@drawable/calendar"/>
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/create_deal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:fab_label="Deals"
+            app:fab_size="mini"
+            android:src="@drawable/currency_usd"/>
+
+    </com.github.clans.fab.FloatingActionMenu>
+
+</android.support.design.widget.CoordinatorLayout>
