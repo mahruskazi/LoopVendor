@@ -21,6 +21,7 @@ import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.provider.OpenableColumns;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -35,8 +36,17 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.Places;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
+import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -56,7 +66,7 @@ import java.util.List;
  * Created by Mahrus Kazi on 2018-06-12.
  */
 
-public class NewEvent extends AppCompatActivity {
+public class NewEvent extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
     private static final int MY_PERMISSIONS_REQUEST_READ_STORAGE = 1;
     private static final String TAG = "NewEvent";
@@ -64,168 +74,44 @@ public class NewEvent extends AppCompatActivity {
     Activity activity = this;
     Context context = this;
 
-    EditText eventTitle;
-    ImageView editButton;
-    ImageView coverPhoto;
-    PlaceAutocompleteFragment autocompleteFragment;
-    TextView startTimeView;
-    TextView startDateView;
-    TextView endTimeView;
-    TextView endDateView;
-    EditText description;
+    private GoogleApiClient mGoogleApiClient;
+    GoogleSignInOptions gso;
 
-    String startTime, startDate, endTime, endDate;
+    private String stripeID;
+    private EditText eventTitle;
+    private ImageView editButton;
+    private ImageView coverPhoto;
+    private PlaceAutocompleteFragment autocompleteFragment;
+    private TextView startTimeView;
+    private TextView startDateView;
+    private TextView endTimeView;
+    private TextView endDateView;
+    private EditText description;
+
+    private String startTime = null,
+            startDate = null,
+            endTime = null,
+            endDate = null;
 
     //Cover photo
-    String image64, imageString;
+    private String image64, imageString;
 
-    EditText ticketName;
-    Spinner ticketType;
-    String typeSelected = "Paid";
-    EditText ticketPrice;
-    EditText ticketQuantity;
-    EditText minTicketOrder;
-
-    public static String getFileName(Context context, Uri uri) {
-        String result = null;
-        if (uri.getScheme().equals("content")) {
-            Cursor cursor = context.getContentResolver().query(uri, null, null, null, null);
-            try {
-                if (cursor != null && cursor.moveToFirst()) {
-                    result = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
-                }
-            } finally {
-                cursor.close();
-            }
-        }
-        if (result == null) {
-            result = uri.getPath();
-            int cut = result.lastIndexOf('/');
-            if (cut != -1) {
-                result = result.substring(cut + 1);
-            }
-        }
-        return result;
-    }
-
-    /**
-     * Get the value of the data column for this Uri. This is useful for
-     * MediaStore Uris, and other file-based ContentProviders.
-     *
-     * @param context       The context.
-     * @param uri           The Uri to query.
-     * @param selection     (Optional) Filter used in the query.
-     * @param selectionArgs (Optional) Selection arguments used in the query.
-     * @return The value of the _data column, which is typically a file path.
-     */
-    public static String getDataColumn(
-            Context context, Uri uri, String selection,
-            String[] selectionArgs
-    ) {
-
-        Cursor cursor = null;
-        final String column = "_data";
-        final String[] projection = {
-                column
-        };
-
-        try {
-            cursor = context.getContentResolver().query(uri, projection, selection, selectionArgs,
-                    null);
-            if (cursor != null && cursor.moveToFirst()) {
-                final int index = cursor.getColumnIndexOrThrow(column);
-                return cursor.getString(index);
-            }
-        } finally {
-            if (cursor != null)
-                cursor.close();
-        }
-        return null;
-    }
-
-    /**
-     * @param uri The Uri to check.
-     * @return Whether the Uri authority is ExternalStorageProvider.
-     */
-    public static boolean isExternalStorageDocument(Uri uri) {
-        return "com.android.externalstorage.documents".equals(uri.getAuthority());
-    }
-
-    /**
-     * @param uri The Uri to check.
-     * @return Whether the Uri authority is DownloadsProvider.
-     */
-    public static boolean isDownloadsDocument(Uri uri) {
-        return "com.android.providers.downloads.documents".equals(uri.getAuthority());
-    }
-
-    /**
-     * @param uri The Uri to check.
-     * @return Whether the Uri authority is MediaProvider.
-     */
-    public static boolean isMediaDocument(Uri uri) {
-        return "com.android.providers.media.documents".equals(uri.getAuthority());
-    }
-
-    /**
-     * @param uri The Uri to check.
-     * @return Whether the Uri authority is Google Photos.
-     */
-    public static boolean isGooglePhotosUri(Uri uri) {
-        return "com.google.android.apps.photos.content".equals(uri.getAuthority());
-    }
-
-    /* Code is derived form https://stackoverflow.com/questions/20067508/get-real-path-from-uri-android-kitkat-new-storage-access-framework/20559175#20559175 */
-
-    /**
-     * @param uri The Uri to check.
-     * @return Whether the Uri authority is Google Drive.
-     */
-    public static boolean isGoogleDriveUri(Uri uri) {
-        return "com.google.android.apps.docs.storage".equals(uri.getAuthority());
-    }
-
-    public static Bitmap modifyOrientation(Bitmap bitmap, String image_absolute_path) throws IOException {
-        ExifInterface ei = new ExifInterface(image_absolute_path);
-        int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
-
-        switch (orientation) {
-            case ExifInterface.ORIENTATION_ROTATE_90:
-                return rotate(bitmap, 90);
-
-            case ExifInterface.ORIENTATION_ROTATE_180:
-                return rotate(bitmap, 180);
-
-            case ExifInterface.ORIENTATION_ROTATE_270:
-                return rotate(bitmap, 270);
-
-            case ExifInterface.ORIENTATION_FLIP_HORIZONTAL:
-                return flip(bitmap, true, false);
-
-            case ExifInterface.ORIENTATION_FLIP_VERTICAL:
-                return flip(bitmap, false, true);
-
-            default:
-                return bitmap;
-        }
-    }
-
-    public static Bitmap rotate(Bitmap bitmap, float degrees) {
-        Matrix matrix = new Matrix();
-        matrix.postRotate(degrees);
-        return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
-    }
-
-    public static Bitmap flip(Bitmap bitmap, boolean horizontal, boolean vertical) {
-        Matrix matrix = new Matrix();
-        matrix.preScale(horizontal ? -1 : 1, vertical ? -1 : 1);
-        return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
-    }
+    private EditText ticketName;
+    private Spinner ticketType;
+    private String typeSelected = "Paid";
+    private EditText ticketPrice;
+    private EditText ticketQuantity;
+    private EditText minTicketOrder;
+    private String placeName = null, address;
+    private double latitude, longitude;
+    private boolean imageSet = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.create_event);
+
+        stripeID = getSharedPreferences("LoopVendor", Context.MODE_PRIVATE).getString("stripe_account", "Nothing");
 
         eventTitle = findViewById(R.id.event_title_edit);
         editButton = findViewById(R.id.photo_edit_button);
@@ -253,6 +139,56 @@ public class NewEvent extends AppCompatActivity {
 
         setupStateEndViews();
         setupSpinner();
+
+        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.web_client_id))
+                .requestEmail()
+                .build();
+
+        if (mGoogleApiClient == null || !mGoogleApiClient.isConnected()) {
+            try {
+                mGoogleApiClient = new GoogleApiClient
+                        .Builder(this)
+                        .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                        .addApi(Places.GEO_DATA_API)
+                        .addApi(Places.PLACE_DETECTION_API)
+                        .enableAutoManage(this, this)
+                        .build();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(Place place) {
+                Places.GeoDataApi.getPlaceById(mGoogleApiClient, place.getId())
+                        .setResultCallback(places -> {
+                            if (places.getStatus().isSuccess() && places.getCount() > 0) {
+                                if (places.get(0) == null) {
+                                    Log.d(TAG, "place is the same");
+                                } else {
+                                    final Place myPlace = places.get(0);
+                                    Log.i(TAG, "Place found: " + myPlace.getName());
+                                    placeName = (String) myPlace.getName();
+                                    Log.i(TAG, "Address: " + myPlace.getAddress());
+                                    address = (String) myPlace.getAddress();
+                                    latitude = myPlace.getLatLng().latitude;
+                                    longitude = myPlace.getLatLng().longitude;
+                                }
+                            } else {
+                                Log.e(TAG, "Place not found");
+                            }
+                            places.release();
+                        });
+                Log.i(TAG, "Place: " + place.getName());
+            }
+
+            @Override
+            public void onError(Status status) {
+                Log.i(TAG, "An error occurred: " + status);
+            }
+        });
     }
 
     @Override
@@ -281,6 +217,7 @@ public class NewEvent extends AppCompatActivity {
                     imageBytes = Base64.decode(image64, Base64.DEFAULT);
                     Bitmap decodedImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
                     coverPhoto.setImageBitmap(decodedImage); //display the image.
+                    imageSet = true;
                 } else {
                     Log.d(TAG, "onActivityResult: imageBitmap is null");
                 }
@@ -304,7 +241,7 @@ public class NewEvent extends AppCompatActivity {
                             bm = modifyOrientation(decodeUri(selectedImageUri), f.getAbsolutePath());
 
                             coverPhoto.setImageBitmap(bm);
-
+                            imageSet = true;
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -476,7 +413,96 @@ public class NewEvent extends AppCompatActivity {
     }
 
     public void postEvent(View view) {
+        if(isGoodToPost()){
+            Event event = new Event();
 
+            event.setEventName(eventTitle.getText().toString());
+            event.setCoverImage(imageString);
+            event.setStartTime(startTime);
+            event.setEndTime(endTime);
+            event.setStartDate(startDate);
+            event.setEndDate(endDate);
+            event.setDescription(description.getText().toString());
+
+            Event.Location location = new Event.Location();
+            location.address = address;
+            location.area = placeName;
+            if (latitude == 1 && longitude == 1) {
+               location.geoLocation = null;
+            } else {
+               location.geoLocation = latitude + "," + longitude;
+            }
+            event.setLocation(location);
+
+            List<Event.Ticket> tickets = new ArrayList<>(); // Made as a list so we can add other ticket options
+            Event.Ticket ticket = new Event.Ticket();
+            ticket.ticketName = ticketName.getText().toString();
+            ticket.ticketType = typeSelected;
+            if(typeSelected.contentEquals("Free"))
+                ticket.ticketPrice = 0.0;
+            else
+                ticket.ticketPrice = Double.parseDouble(ticketPrice.getText().toString());
+            ticket.ticketQuantity = Integer.parseInt(ticketQuantity.getText().toString());
+            ticket.minTicketOrder = Integer.parseInt(minTicketOrder.getText().toString());
+
+            tickets.add(ticket);
+            event.setTickets(tickets);
+            FireBaseDataBase dataBase = new FireBaseDataBase();
+            dataBase.addEvent(event);
+            //setResult(RESULT_OK);
+            Intent intent = new Intent(NewEvent.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
+    }
+
+    private boolean isGoodToPost() {
+
+        if (eventTitle.getText().toString().isEmpty()) {
+            Toast.makeText(context, "Event title is empty", Toast.LENGTH_LONG).show();
+            return false;
+        } else if (startTime == null) {
+            Toast.makeText(context, "Start time not set", Toast.LENGTH_LONG).show();
+            return false;
+        } else if (endTime == null) {
+            Toast.makeText(context, "End time not set", Toast.LENGTH_LONG).show();
+            return false;
+        } else if (startDate == null) {
+            Toast.makeText(context, "Start date not set", Toast.LENGTH_LONG).show();
+            return false;
+        } else if (endDate == null) {
+            Toast.makeText(context, "End date not set", Toast.LENGTH_LONG).show();
+            return false;
+        } else if (description.getText().toString().isEmpty()) {
+            Toast.makeText(context, "Event description is empty", Toast.LENGTH_LONG).show();
+            return false;
+        } else if (ticketName.getText().toString().isEmpty()) {
+            Toast.makeText(context, "Ticket Name is empty", Toast.LENGTH_LONG).show();
+            return false;
+        } else if (ticketPrice.getText().toString().isEmpty() && !typeSelected.contentEquals("Free")) {
+            Toast.makeText(context, "Ticket price is empty", Toast.LENGTH_LONG).show();
+            return false;
+        } else if (ticketQuantity.getText().toString().isEmpty()) {
+            Toast.makeText(context, "Ticket quantity is empty", Toast.LENGTH_LONG).show();
+            return false;
+        } else if (Integer.parseInt(ticketQuantity.getText().toString()) <= 0) {
+            Toast.makeText(context, "Ticket quantity not valid", Toast.LENGTH_LONG).show();
+            return false;
+        } else if (minTicketOrder.getText().toString().isEmpty()) {
+            Toast.makeText(context, "Minimum tickets is empty", Toast.LENGTH_LONG).show();
+            return false;
+        } else if (Integer.parseInt(minTicketOrder.getText().toString()) <= 0) {
+            Toast.makeText(context, "Minimum tickets must be greater than 0", Toast.LENGTH_LONG).show();
+            return false;
+        } else if(placeName == null){
+            Toast.makeText(context, "Location is not set", Toast.LENGTH_LONG).show();
+            return false;
+        } else if (!imageSet){
+            Toast.makeText(context, "Please add a cover photo", Toast.LENGTH_LONG).show();
+            return false;
+        }
+
+        return true;
     }
 
     private void selectImage() {
@@ -574,8 +600,6 @@ public class NewEvent extends AppCompatActivity {
                     if ("primary".equalsIgnoreCase(type)) {
                         return Environment.getExternalStorageDirectory() + "/" + split[1];
                     }
-
-                    // TODO handle non-primary volumes
                 }
                 // DownloadsProvider
                 else if (isDownloadsDocument(uri)) {
@@ -719,5 +743,146 @@ public class NewEvent extends AppCompatActivity {
         o2.inSampleSize = scale;
         return BitmapFactory.decodeStream(
                 getContentResolver().openInputStream(selectedImage), null, o2);
+    }
+
+    public static String getFileName(Context context, Uri uri) {
+        String result = null;
+        if (uri.getScheme().equals("content")) {
+            Cursor cursor = context.getContentResolver().query(uri, null, null, null, null);
+            try {
+                if (cursor != null && cursor.moveToFirst()) {
+                    result = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+                }
+            } finally {
+                cursor.close();
+            }
+        }
+        if (result == null) {
+            result = uri.getPath();
+            int cut = result.lastIndexOf('/');
+            if (cut != -1) {
+                result = result.substring(cut + 1);
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Get the value of the data column for this Uri. This is useful for
+     * MediaStore Uris, and other file-based ContentProviders.
+     *
+     * @param context       The context.
+     * @param uri           The Uri to query.
+     * @param selection     (Optional) Filter used in the query.
+     * @param selectionArgs (Optional) Selection arguments used in the query.
+     * @return The value of the _data column, which is typically a file path.
+     */
+    public static String getDataColumn(
+            Context context, Uri uri, String selection,
+            String[] selectionArgs
+    ) {
+
+        Cursor cursor = null;
+        final String column = "_data";
+        final String[] projection = {
+                column
+        };
+
+        try {
+            cursor = context.getContentResolver().query(uri, projection, selection, selectionArgs,
+                    null);
+            if (cursor != null && cursor.moveToFirst()) {
+                final int index = cursor.getColumnIndexOrThrow(column);
+                return cursor.getString(index);
+            }
+        } finally {
+            if (cursor != null)
+                cursor.close();
+        }
+        return null;
+    }
+
+    /**
+     * @param uri The Uri to check.
+     * @return Whether the Uri authority is ExternalStorageProvider.
+     */
+    public static boolean isExternalStorageDocument(Uri uri) {
+        return "com.android.externalstorage.documents".equals(uri.getAuthority());
+    }
+
+    /**
+     * @param uri The Uri to check.
+     * @return Whether the Uri authority is DownloadsProvider.
+     */
+    public static boolean isDownloadsDocument(Uri uri) {
+        return "com.android.providers.downloads.documents".equals(uri.getAuthority());
+    }
+
+    /**
+     * @param uri The Uri to check.
+     * @return Whether the Uri authority is MediaProvider.
+     */
+    public static boolean isMediaDocument(Uri uri) {
+        return "com.android.providers.media.documents".equals(uri.getAuthority());
+    }
+
+    /**
+     * @param uri The Uri to check.
+     * @return Whether the Uri authority is Google Photos.
+     */
+    public static boolean isGooglePhotosUri(Uri uri) {
+        return "com.google.android.apps.photos.content".equals(uri.getAuthority());
+    }
+
+    /* Code is derived form https://stackoverflow.com/questions/20067508/get-real-path-from-uri-android-kitkat-new-storage-access-framework/20559175#20559175 */
+
+    /**
+     * @param uri The Uri to check.
+     * @return Whether the Uri authority is Google Drive.
+     */
+    public static boolean isGoogleDriveUri(Uri uri) {
+        return "com.google.android.apps.docs.storage".equals(uri.getAuthority());
+    }
+
+    public static Bitmap modifyOrientation(Bitmap bitmap, String image_absolute_path) throws IOException {
+        ExifInterface ei = new ExifInterface(image_absolute_path);
+        int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+
+        switch (orientation) {
+            case ExifInterface.ORIENTATION_ROTATE_90:
+                return rotate(bitmap, 90);
+
+            case ExifInterface.ORIENTATION_ROTATE_180:
+                return rotate(bitmap, 180);
+
+            case ExifInterface.ORIENTATION_ROTATE_270:
+                return rotate(bitmap, 270);
+
+            case ExifInterface.ORIENTATION_FLIP_HORIZONTAL:
+                return flip(bitmap, true, false);
+
+            case ExifInterface.ORIENTATION_FLIP_VERTICAL:
+                return flip(bitmap, false, true);
+
+            default:
+                return bitmap;
+        }
+    }
+
+    public static Bitmap rotate(Bitmap bitmap, float degrees) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(degrees);
+        return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+    }
+
+    public static Bitmap flip(Bitmap bitmap, boolean horizontal, boolean vertical) {
+        Matrix matrix = new Matrix();
+        matrix.preScale(horizontal ? -1 : 1, vertical ? -1 : 1);
+        return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
     }
 }

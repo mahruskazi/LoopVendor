@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ImageView
+        android:id="@+id/frag_event_photo"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:src="@drawable/loop_logo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <TextView
+        android:id="@+id/frag_event_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="17sp"
+        android:textColor="#FFF"
+        android:text="Event Title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/frag_event_photo"
+        android:layout_marginTop="10dp" />
+
+    <TextView
+        android:id="@+id/frag_event_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="The description will go here"
+        android:textColor="#FFF"
+        app:layout_constraintTop_toBottomOf="@id/frag_event_title"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp" />
+
+</android.support.constraint.ConstraintLayout>

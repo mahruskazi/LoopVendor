@@ -23,11 +23,19 @@
         <activity android:name=".MainActivity"/>
         <activity android:name=".StripeConnectView"/>
         <activity android:name=".NewEvent" />
+        <activity android:name=".EmailSignupActivity" />
+        <activity android:name=".OrganizersSignin" />
+        <activity android:name=".EmailSigninActivity" />
 
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCzvgT83uSMkBFZo7k6HvfCFibMxHpjga8" />
+
+        <meta-data android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_application_id"/>
+
+
 
     </application>
 

@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Loop Vendor</string>
+
+    <string name="web_client_id">1064490998366-tekgbjn35kemm0ficpad9s63iais1urv.apps.googleusercontent.com</string>
+    <string name="facebook_application_id" >2064360667139015</string>
+    <string name="facebook_login_protocol_scheme" translatable="false">fb2064360667139015</string>
+    <string name="sign_in_with_email">Sign in with Email</string>
+    <string name="sign_in_with_facebook">Sign in with Facebook</string>
+    <string name="sign_in_with_google">Sign in with Google</string>
 </resources>

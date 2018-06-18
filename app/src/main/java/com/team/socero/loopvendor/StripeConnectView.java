@@ -47,7 +47,6 @@ public class StripeConnectView extends AppCompatActivity {
 
         @Override
         public void onPageFinished(WebView view, String url) {
-            // TODO Auto-generated method stub
 
             if(url.contains("code=")) {
                 String token = url.substring(url.indexOf("code=") + "code=".length());
@@ -67,7 +66,6 @@ public class StripeConnectView extends AppCompatActivity {
 
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            // TODO Auto-generated method stub
             //Log.d("StripeConnect", "shouldOverrideUrlLoading: " + url);
 
             return super.shouldOverrideUrlLoading(view, url);

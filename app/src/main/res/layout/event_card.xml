@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="5dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/event_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:id="@+id/event_card_photo"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:src="@drawable/loop_logo"
+                android:layout_marginLeft="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"/>
+
+            <TextView
+                android:id="@+id/event_card_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Event Title"
+                android:textSize="17sp"
+                android:textColor="#FFF"
+                app:layout_constraintLeft_toRightOf="@id/event_card_photo"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"/>
+
+            <TextView
+                android:id="@+id/event_card_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="12-25-1997"
+                android:textColor="#FFF"
+                app:layout_constraintTop_toBottomOf="@id/event_card_title"
+                app:layout_constraintStart_toStartOf="@id/event_card_title"
+                android:layout_marginTop="5dp"
+                />
+
+            <TextView
+                android:id="@+id/event_card_address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="123 Someplace, Ontario"
+                android:textColor="#FFF"
+                app:layout_constraintTop_toBottomOf="@id/event_card_date"
+                app:layout_constraintStart_toStartOf="@id/event_card_date"
+                android:layout_marginTop="5dp"
+                />
+
+        </android.support.constraint.ConstraintLayout>
+
+    </android.support.v7.widget.CardView>
+
+</LinearLayout>
