@@ -449,6 +449,7 @@ public class NewEvent extends AppCompatActivity implements GoogleApiClient.OnCon
             event.setTickets(tickets);
             FireBaseDataBase dataBase = new FireBaseDataBase();
             dataBase.addEvent(event);
+            //dataBase.addEventAWS(event);
             finish();
         }
     }

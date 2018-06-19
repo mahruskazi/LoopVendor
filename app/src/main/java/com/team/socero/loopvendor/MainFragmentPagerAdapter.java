@@ -30,6 +30,9 @@ public class MainFragmentPagerAdapter extends FragmentPagerAdapter {
         if (position == 0) {
             return mFragments.get(0);
         }
+        else if (position == 1) {
+            return new BarcodeCaptureFragment();
+        }
         else{
             return null;
         }
@@ -43,7 +46,7 @@ public class MainFragmentPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return 1;
+        return 2;
     }
 
     // This determines the title for each tab
@@ -53,6 +56,8 @@ public class MainFragmentPagerAdapter extends FragmentPagerAdapter {
         switch (position) {
             case 0:
                 return "Dashboard";
+            case 1:
+                return "Scan";
             default:
                 return null;
         }
