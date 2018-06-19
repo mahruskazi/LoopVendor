@@ -1,67 +1,50 @@
 package com.team.socero.loopvendor;
 
-import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.View;
-
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.ValueEventListener;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
+    ViewPager viewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        setResult(RESULT_OK);
 
-        RecyclerView rv = (RecyclerView)findViewById(R.id.plans);
+        viewPager = (ViewPager) findViewById(R.id.viewpager);
 
-        LinearLayoutManager llm = new LinearLayoutManager(this);
-        rv.setLayoutManager(llm);
+        // Create an adapter that knows which fragment should be shown on each page
+        MainFragmentPagerAdapter adapter = new MainFragmentPagerAdapter(this, getSupportFragmentManager());
 
-        FireBaseDataBase dataBase = new FireBaseDataBase();
-        dataBase.eventsReference().addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Iterable<DataSnapshot> children = dataSnapshot.getChildren();
-                List<Event> events = new ArrayList<>();
-                for(DataSnapshot child : children){
-                    events.add(child.getValue(Event.class));
-                    Log.d(TAG, "onDataChange: Here");
-                }
-                RVAdapter adapter = new RVAdapter(events);
-                rv.setAdapter(adapter);
-            }
+        // Set the adapter onto the view pager
+        viewPager.setAdapter(adapter);
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-    }
-
-    public void createEvent(View view) {
-        Intent intent = new Intent(this, NewEvent.class);
-        startActivityForResult(intent, 111);
+        // Give the TabLayout the ViewPager
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
+        tabLayout.setupWithViewPager(viewPager);
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == RESULT_OK && requestCode == 111){
-            finish();
-        }
+    protected void onRestart() {
+        super.onRestart();
+        viewPager.getAdapter().notifyDataSetChanged();
+        Log.d(TAG, "onRestart: ");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume: ");
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.d(TAG, "onStart: ");
     }
 }
